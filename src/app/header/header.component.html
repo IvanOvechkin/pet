@@ -1,3 +1,13 @@
 <div class="app-header">
-  <span class="material-icons nav-icon" (click)="toggleHiddenNav()">list</span>
+  <div class="block-nav">
+    <span class="material-icons nav-icon" (click)="toggleHiddenNav()">list</span>
+  </div>
+
+  <div class="block-select">
+    <app-custom-select [options]="selectOptions"
+                       [placeholder]="selectorPlaceholder"
+                       [startValue]="2"
+                       (selectOption)="onChangedSelect($event)">
+    </app-custom-select>
+  </div>
 </div>
