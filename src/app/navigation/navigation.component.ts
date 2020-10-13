@@ -12,7 +12,7 @@ interface ILink {
 })
 export class NavigationComponent implements OnInit {
 
-  links: ILink[] = [
+  public links: ILink[] = [
     {title: 'Счёт', url: 'score'},
     {title: 'История', url: 'history'},
     {title: 'Планирование', url: 'planning'},
