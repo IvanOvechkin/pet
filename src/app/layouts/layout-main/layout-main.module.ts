@@ -10,6 +10,7 @@ import {HistoryComponent} from "../../history/history.component";
 import {PlanningComponent} from "../../planning/planning.component";
 import {RecordComponent} from "../../record/record.component";
 import {CategoriesComponent} from "../../categories/categories.component";
+import {CustomSelectModule} from "../../plugins/select/custom-select/custom-select.module";
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {CategoriesComponent} from "../../categories/categories.component";
   ],
   imports: [
     CommonModule,
-    LayoutMainRoutingModule
+    LayoutMainRoutingModule,
+    CustomSelectModule
   ],
   entryComponents: [
     NavigationComponent
