@@ -6,7 +6,8 @@
   <div class="block-select">
     <app-custom-select [options]="selectOptions"
                        [placeholder]="selectorPlaceholder"
-                       [startValue]="2"
+                       [startValue]="false"
+                       [currentSelected]="false"
                        (selectOption)="onChangedSelect($event)">
     </app-custom-select>
   </div>
