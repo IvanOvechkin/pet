@@ -1,15 +1,16 @@
 <div class="select" (click)="toogle()" [ngClass]="{open: openSelector}">
   <div class="select__backdrop"></div>
   <div class="select__input">
-    <span>{{currentOption? currentOption.value: placeholder}}</span>
+    <span>{{currentOption && currentSelected? currentOption.value: placeholder}}</span>
     <span class="material-icons">{{openSelector? 'keyboard_arrow_up': 'keyboard_arrow_down'}}</span>
   </div>
   <div class="select__dropdown">
     <ul class="select__list">
       <li class="select__item"
-          [ngClass]="{selected: currentOption?.id === option.id}"
+          [ngClass]="{selected: currentOption?.id === option.id && currentSelected}"
           (click)="change(option)"
           *ngFor="let option of options">
+        <span class="material-icons">{{option.icon}}</span>
         {{option.value}}
       </li>
     </ul>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 interface ILink {
   title: string;
-  url: string
+  url: string;
 }
 
 @Component({

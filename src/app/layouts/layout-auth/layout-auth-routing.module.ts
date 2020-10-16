@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
-import {RouterModule, Routes} from "@angular/router";
-import {LayoutAuthComponent} from "./layout-auth.component";
+import {RouterModule, Routes} from '@angular/router';
+import {LayoutAuthComponent} from './layout-auth.component';
+import {AuthComponent} from '../../auth/auth.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LayoutAuthComponent
+    component: LayoutAuthComponent,
+    children: [
+      {path: 'authentication', component: AuthComponent}
+    ]
   }
 ];
 

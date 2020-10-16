@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HiddenHavService} from '../services/hidden-hav.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,26 +10,32 @@ import {HiddenHavService} from '../services/hidden-hav.service';
 export class HeaderComponent implements OnInit {
 
   public selectOptions = [
-    {id: 1, value: 'One'},
-    {id: 2, value: 'Two'},
-    {id: 3, value: 'Tree'},
-    {id: 4, value: 'Four'},
-    {id: 5, value: 'Five'},
-    {id: 6, value: 'Six'},
+    {id: 1, value: 'Профиль', icon: 'account_circle', url: 'main/profile'},
+    {id: 2, value: 'Выйти', icon: 'assignment_return', url: 'auth/authentication'}
   ];
 
-  selectorPlaceholder: string = 'Выбрать';
+  public selectorPlaceholder = 'Меню';
 
-  constructor(private hiddenHavService: HiddenHavService) { }
+  constructor(
+    private hiddenHavService: HiddenHavService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
   }
 
-  toggleHiddenNav() {
+  toggleHiddenNav(): void {
     this.hiddenHavService.setHiddenState();
   }
 
-  onChangedSelect($event) {
-    console.log($event);
+  onChangedSelect($event): void {
+    this.router.navigate([$event.url]).then(
+      (val) => {
+        console.log('redirect', val);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

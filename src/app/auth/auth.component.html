@@ -1,0 +1,28 @@
+<div class="auth-window">
+  <div class="form-group">
+    <span class="auth-title">Домашняя бухгалтерия</span>
+  </div>
+
+  <form [formGroup]="authForm" novalidate (ngSubmit)="submit()">
+    <div class="form-group">
+      <input class="form-control" placeholder="Email" name="email" id="email" formControlName="email"/>
+      <label class="form-warning" *ngIf="authForm.controls['email'].invalid && authForm.controls['email'].touched" for="email">
+        email
+      </label>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" placeholder="Пароль" name="password" formControlName="password"/>
+      <label class="form-warning" *ngIf="authForm.controls['password'].invalid && authForm.controls['password'].touched" for="password">
+        password
+      </label>
+    </div>
+
+    <div class="form-group">
+      <button class="button-submit" [disabled]="authForm.invalid">
+        <span>Войти</span>
+        <span class="material-icons" style="margin-left: auto;">login</span>
+      </button>
+    </div>
+  </form>
+</div>

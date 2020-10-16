@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from "rxjs";
-import {HiddenHavService} from "../../services/hidden-hav.service";
+import {Observable} from 'rxjs';
+import {HiddenHavService} from '../../services/hidden-hav.service';
 
 @Component({
   selector: 'app-layout-main',
