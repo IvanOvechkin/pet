@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {ApiService} from '../api/services/api.service';
+import {switchMap, tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -9,9 +12,10 @@ import {Router} from '@angular/router';
 })
 export class AuthComponent implements OnInit {
 
-  authForm: FormGroup;
+  public authForm: FormGroup;
+  public load = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private api: ApiService) { }
 
   ngOnInit(): void {
     this.authForm = new FormGroup({
@@ -37,14 +41,24 @@ export class AuthComponent implements OnInit {
   }
 
   private initAuth(): void {
-    console.log(this.authForm.value);
-    this.router.navigate(['/main/profile']).then(
-      (val) => {
+    this.load = true;
+    this.api.Auth(this.authForm.value)
+      .pipe(
+        tap((val) => {
+          this.load = false;
+        }),
+        switchMap(respoce => {
+          return respoce.hash ? this.redirectToProfile() : new Observable<never>();
+        })
+      )
+      .subscribe(val => {
         console.log('redirect', val);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  private redirectToProfile(): Promise<boolean> {
+    return this.router.navigate(['/main/profile']);
   }
 }

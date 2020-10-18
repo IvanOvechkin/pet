@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {HiddenHavService} from '../services/hidden-hav.service';
+import {HiddenHavService} from '../services/nav/hidden-hav.service';
 import {Router} from '@angular/router';
 
 @Component({
