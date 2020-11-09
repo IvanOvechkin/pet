@@ -1,0 +1,31 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+.form-group-row {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 20px;
+  align-items: center;
+}
+
+.form-control {
+  border: none;
+  outline: none;
+  height: 40px;
+  border-bottom: darkgray solid 2px;
+  padding-left: 5px;
+  font-size: 1rem;
+}
+
+.form-control:focus {
+  border-bottom: none;
+}
+
+.form-warning {
+  color: red;
+  font-size: 0.8rem;
+  padding-left: 5px;
+}

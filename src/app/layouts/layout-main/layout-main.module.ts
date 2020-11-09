@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {LayoutMainRoutingModule} from './layout-main-routing.module';
-import {CustomSelectModule} from '../../plugins/custom-select/custom-select.module';
 import {LayoutMainComponent} from './layout-main.component';
 import {NavigationComponent} from '../../navigation/navigation.component';
 import {HeaderComponent} from '../../header/header.component';
@@ -12,6 +11,8 @@ import {PlanningComponent} from '../../planning/planning.component';
 import {RecordComponent} from '../../record/record.component';
 import {CategoriesComponent} from '../../categories/categories.component';
 import {ProfileComponent} from '../../profile/profile.component';
+import {PluginsModule} from "../../plugins/plugins.module";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {ProfileComponent} from '../../profile/profile.component';
   imports: [
     CommonModule,
     LayoutMainRoutingModule,
-    CustomSelectModule
+    PluginsModule,
+    ReactiveFormsModule
   ],
   entryComponents: [
     NavigationComponent

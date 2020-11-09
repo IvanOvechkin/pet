@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {CustomSelectComponent} from './custom-select.component';
+import {CustomSelectComponent} from "./custom-select/custom-select.component";
 
 
 
@@ -15,4 +15,4 @@ import {CustomSelectComponent} from './custom-select.component';
     CustomSelectComponent
   ]
 })
-export class CustomSelectModule { }
+export class PluginsModule { }

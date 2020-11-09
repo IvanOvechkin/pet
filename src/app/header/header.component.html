@@ -3,6 +3,12 @@
     <span class="material-icons nav-icon" (click)="toggleHiddenNav()">list</span>
   </div>
 
+  <div class="date-header">
+    <span>
+      {{date | date: 'mediumDate'}}
+    </span>
+  </div>
+
   <div class="block-select">
     <app-custom-select [options]="selectOptions"
                        [placeholder]="selectorPlaceholder"

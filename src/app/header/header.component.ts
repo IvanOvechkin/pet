@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HiddenHavService} from '../services/nav/hidden-hav.service';
 import {Router} from '@angular/router';
+import {LocalStorageService} from "../services/local-storage/local-storage.service";
 
 @Component({
   selector: 'app-header',
@@ -15,10 +16,12 @@ export class HeaderComponent implements OnInit {
   ];
 
   public selectorPlaceholder = 'Меню';
+  public date = new Date();
 
   constructor(
     private hiddenHavService: HiddenHavService,
-    private router: Router
+    private router: Router,
+    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(): void {
@@ -29,6 +32,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onChangedSelect($event): void {
+    // if ($event.id === 2) this.localStorageService.clear();
     this.router.navigate([$event.url]).then(
       (val) => {
         console.log('redirect', val);

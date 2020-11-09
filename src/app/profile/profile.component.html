@@ -1,1 +1,23 @@
-<p>profile works!</p>
+<div class="profile">
+  <header><h1>Профиль</h1></header>
+  <section>
+    <form [formGroup]="updateNameForm" novalidate (ngSubmit)="submit()">
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="Имя" name="userName" id="userName" formControlName="userName">
+        <label class="form-warning" *ngIf="updateNameForm.controls['userName'].invalid && updateNameForm.controls['userName'].touched" for="userName">
+          name
+        </label>
+      </div>
+
+      <div class="form-group">
+        <button class="button-submit">
+          <div *ngIf="load; else buttonContent" class="spinner"></div>
+          <ng-template #buttonContent>
+            <span>Обновить</span>
+            <span class="material-icons">login</span>
+          </ng-template>
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

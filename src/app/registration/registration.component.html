@@ -1,0 +1,45 @@
+<div class="auth-window">
+  <div class="form-group">
+    <span class="auth-title">Домашняя бухгалтерия</span>
+  </div>
+
+  <form [formGroup]="registrationForm" novalidate (ngSubmit)="submit()">
+    <div class="form-group">
+      <input class="form-control" placeholder="Email" name="email" id="email" formControlName="email"/>
+      <label class="form-warning" *ngIf="registrationForm.controls['email'].invalid && registrationForm.controls['email'].touched" for="email">
+        email
+      </label>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" placeholder="Пароль" name="password" id="password" formControlName="password"/>
+      <label class="form-warning" *ngIf="registrationForm.controls['password'].invalid && registrationForm.controls['password'].touched" for="password">
+        password
+      </label>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" placeholder="Имя" name="userName" id="userName" formControlName="userName"/>
+      <label class="form-warning" *ngIf="registrationForm.controls['userName'].invalid && registrationForm.controls['userName'].touched" for="userName">
+        name
+      </label>
+    </div>
+
+    <div class="form-group-row">
+      <input class="form-control" type="checkbox" name="agree" id="agree" formControlName="agree" required/>
+      <label class="label-checkbox" for="agree">
+        С правилами согласен
+      </label>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="button-submit" [disabled]="registrationForm.invalid">
+        <div *ngIf="load; else buttonContent" class="spinner"></div>
+        <ng-template #buttonContent>
+          <span>Зарегистрироваться</span>
+          <span class="material-icons">login</span>
+        </ng-template>
+      </button>
+    </div>
+  </form>
+</div>
