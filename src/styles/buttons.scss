@@ -1,0 +1,40 @@
+.button-submit {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+
+  border-radius: 5px;
+  background: #1bc1b1;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-family: inherit;
+  height: 30px;
+  box-sizing: content-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s ease-out;
+
+  .material-icons {
+    margin-left: auto;
+  }
+}
+
+.button-submit:hover {
+  background: teal;
+  cursor: pointer;
+}
+
+.button-submit:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px #cbd6ee;
+}
+
+.button-submit[disabled] {
+  color: #d2d5db;
+  background: #6c7589;
+  cursor: not-allowed;
+}

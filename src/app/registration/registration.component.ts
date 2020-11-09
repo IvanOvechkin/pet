@@ -3,23 +3,24 @@ import { FormGroup, FormControl, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ApiService} from '../api/services/api.service';
 import {switchMap, tap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
 import {LocalStorageService} from "../services/local-storage/local-storage.service";
+import {IRegistrationUserParams} from "../api/services/abstract-api.service.";
+import {Observable} from "rxjs";
 
 @Component({
-  selector: 'app-auth',
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  selector: 'app-registration',
+  templateUrl: './registration.component.html',
+  styleUrls: ['./registration.component.scss']
 })
-export class AuthComponent implements OnInit {
+export class RegistrationComponent implements OnInit {
 
-  public authForm: FormGroup;
+  public registrationForm: FormGroup;
   public load = false;
 
   constructor(private router: Router, private api: ApiService, private localStorage: LocalStorageService) { }
 
   ngOnInit(): void {
-    this.authForm = new FormGroup({
+    this.registrationForm = new FormGroup({
       email: new FormControl(null, [
         Validators.email,
         Validators.required
@@ -27,23 +28,31 @@ export class AuthComponent implements OnInit {
       password: new FormControl(null, [
         Validators.required,
         Validators.minLength(6)
-      ])
+      ]),
+      userName: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(1)
+      ]),
+      agree: new FormControl(false)
     });
   }
 
   submit(): void {
-    if (this.authForm.invalid) {
-      const controls = this.authForm.controls;
+    if (this.registrationForm.invalid) {
+      const controls = this.registrationForm.controls;
       Object.keys(controls).forEach(controlName => controls[controlName].markAsTouched());
       return;
     }
 
-    this.initAuth();
+    const {email, password, userName} = this.registrationForm.value;
+    const requestParams = {email, password, userName};
+
+    this.initRegistrationUser(requestParams);
   }
 
-  private initAuth(): void {
+  private initRegistrationUser(requestParams: IRegistrationUserParams): void {
     this.load = true;
-    this.api.authUser(this.authForm.value)
+    this.api.createUser(requestParams)
       .pipe(
         tap((val) => {
           this.load = false;

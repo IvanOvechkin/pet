@@ -7,99 +7,17 @@
     font-size: 1.5rem;
   }
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 20px;
+  .registrationLink {
+    text-align: center;
   }
 
-  .form-control {
-    border: none;
-    outline: none;
-    height: 30px;
-    border-bottom: lightgrey solid 1.3px;
-    padding-left: 5px;
+  .registrationLink a:visited,
+  .registrationLink a:active,
+  .registrationLink a:link {
+    text-decoration: none;
   }
-
-  .form-control:focus {
-    border-bottom: none;
-  }
-
-  .form-warning {
+  .registrationLink a:hover {
+    text-decoration: none;
     color: red;
-    font-size: 0.8rem;
-    padding-left: 5px;
-  }
-
-  .button-submit {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border: 0;
-
-    border-radius: 5px;
-    background: #1bc1b1;
-    color: #fff;
-    padding: 8px 16px;
-    font-size: 16px;
-    min-width: 100px;
-    font-family: inherit;
-    height: 40px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.3s ease-out;
-
-    .material-icons {
-      margin-left: auto;
-    }
-  }
-
-  .button-submit:hover {
-    background: teal;
-    cursor: pointer;
-  }
-
-  .button-submit:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px #cbd6ee;
-  }
-
-  .button-submit[disabled] {
-    color: #d2d5db;
-    background: #6c7589;
-    cursor: not-allowed;
-  }
-
-  .spinner {
-    animation: rotate 2s linear infinite;
-    height: 100%;
-
-    & .path {
-      stroke: white;
-      animation: dash 1.5s ease-in-out infinite;
-    }
-  }
-
-  @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes dash {
-    0% {
-      stroke-dasharray: 1, 150;
-      stroke-dashoffset: 0;
-    }
-    50% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -35;
-    }
-    100% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -124;
-    }
   }
 }
