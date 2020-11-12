@@ -1,1 +1,4 @@
 <router-outlet></router-outlet>
+<div *ngIf="(toast$ | async) as toast">
+  <app-toast *ngIf="toast.show" [toast]="toast"></app-toast>
+</div>

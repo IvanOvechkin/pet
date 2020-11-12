@@ -8,7 +8,7 @@ import {
 import {Observable, throwError} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map, tap} from 'rxjs/operators';
-import {LocalStorageService} from "../../services/local-storage/local-storage.service";
+import {LocalStorageService} from '../../services/local-storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,20 @@ export class ApiService implements AbstractApiService {
         }),
         tap(user => {
           this.localStorageService.setItem('user', user);
+        }),
+        catchError(err => {
+          return throwError(err);
+        })
+      );
+  }
+
+  public updateUserData(params: any): Observable<any> {
+    const user = this.localStorageService.getItem('user');
+    return this.http.put<any>(`${this.url}/user/${user.id}/userName.json`, params.userName)
+      .pipe(
+        tap(name => {
+          const newUserData = {...user, userName: params.userName};
+          this.localStorageService.setItem('user', newUserData);
         }),
         catchError(err => {
           return throwError(err);

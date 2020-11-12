@@ -3,9 +3,9 @@ import { FormGroup, FormControl, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ApiService} from '../api/services/api.service';
 import {switchMap, tap} from 'rxjs/operators';
-import {LocalStorageService} from "../services/local-storage/local-storage.service";
-import {IRegistrationUserParams} from "../api/services/abstract-api.service.";
-import {Observable} from "rxjs";
+import {LocalStorageService} from '../services/local-storage/local-storage.service';
+import {IRegistrationUserParams} from '../api/services/abstract-api.service.';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-registration',
@@ -30,8 +30,7 @@ export class RegistrationComponent implements OnInit {
         Validators.minLength(6)
       ]),
       userName: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(1)
+        Validators.required
       ]),
       agree: new FormControl(false)
     });

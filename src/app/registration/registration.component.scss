@@ -11,4 +11,18 @@
     padding-left: 20px;
     color: dimgray
   }
+
+  .registrationLink {
+    text-align: center;
+  }
+
+  .registrationLink a:visited,
+  .registrationLink a:active,
+  .registrationLink a:link {
+    text-decoration: none;
+  }
+  .registrationLink a:hover {
+    text-decoration: none;
+    color: red;
+  }
 }

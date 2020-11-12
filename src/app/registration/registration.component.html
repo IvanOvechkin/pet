@@ -5,21 +5,44 @@
 
   <form [formGroup]="registrationForm" novalidate (ngSubmit)="submit()">
     <div class="form-group">
-      <input class="form-control" placeholder="Email" name="email" id="email" formControlName="email"/>
+      <input class="form-control"
+             placeholder="Email"
+             name="email" id="email"
+             formControlName="email"
+             [ngClass]="{
+               'input-warning': registrationForm.controls['email'].invalid && registrationForm.controls['email'].touched,
+               'input-success': registrationForm.controls['email'].valid && registrationForm.controls['email'].touched
+             }"/>
       <label class="form-warning" *ngIf="registrationForm.controls['email'].invalid && registrationForm.controls['email'].touched" for="email">
         email
       </label>
     </div>
 
     <div class="form-group">
-      <input class="form-control" placeholder="Пароль" name="password" id="password" formControlName="password"/>
+      <input class="form-control"
+             placeholder="Пароль"
+             name="password"
+             id="password"
+             formControlName="password"
+             [ngClass]="{
+               'input-warning': registrationForm.controls['password'].invalid && registrationForm.controls['password'].touched,
+               'input-success': registrationForm.controls['password'].valid && registrationForm.controls['password'].touched
+             }"/>
       <label class="form-warning" *ngIf="registrationForm.controls['password'].invalid && registrationForm.controls['password'].touched" for="password">
         password
       </label>
     </div>
 
     <div class="form-group">
-      <input class="form-control" placeholder="Имя" name="userName" id="userName" formControlName="userName"/>
+      <input class="form-control"
+             placeholder="Имя"
+             name="userName"
+             id="userName"
+             formControlName="userName"
+             [ngClass]="{
+               'input-warning': registrationForm.controls['userName'].invalid && registrationForm.controls['userName'].touched,
+               'input-success': registrationForm.controls['userName'].valid && registrationForm.controls['userName'].touched
+             }"/>
       <label class="form-warning" *ngIf="registrationForm.controls['userName'].invalid && registrationForm.controls['userName'].touched" for="userName">
         name
       </label>
@@ -42,4 +65,8 @@
       </button>
     </div>
   </form>
+
+  <div class="form-group">
+    <span class="registrationLink">Уже есть аккаунт? <a routerLink="/auth/authentication">Войти</a></span>
+  </div>
 </div>

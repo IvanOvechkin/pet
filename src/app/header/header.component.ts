@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {HiddenHavService} from '../services/nav/hidden-hav.service';
 import {Router} from '@angular/router';
-import {LocalStorageService} from "../services/local-storage/local-storage.service";
+import {LocalStorageService} from '../services/local-storage/local-storage.service';
+import {interval} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +18,10 @@ export class HeaderComponent implements OnInit {
   ];
 
   public selectorPlaceholder = 'Меню';
-  public date = new Date();
+  public date = interval(1000)
+    .pipe(
+      map(() => new Date())
+    );
 
   constructor(
     private hiddenHavService: HiddenHavService,

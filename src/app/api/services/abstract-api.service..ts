@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs';
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
 export interface IRegistrationUserParams {
   email: string;
@@ -25,4 +25,5 @@ export interface IUserLogPass {
 export abstract class AbstractApiService {
   abstract authUser(params: IUserLogPass): Observable<IUserData | Error>;
   abstract createUser(params: IRegistrationUserParams): Observable<IUserData | Error>;
+  abstract updateUserData(params: any): Observable<any>;
 }
