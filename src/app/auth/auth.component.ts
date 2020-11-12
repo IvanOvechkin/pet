@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {ApiService} from '../api/services/api.service';
 import {switchMap, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {LocalStorageService} from "../services/local-storage/local-storage.service";
+import {LocalStorageService} from '../services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-auth',

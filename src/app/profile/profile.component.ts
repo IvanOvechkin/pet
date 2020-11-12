@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import {AbstractApiService} from "../api/services/abstract-api.service.";
-import {LocalStorageService} from "../services/local-storage/local-storage.service";
+import {LocalStorageService} from '../services/local-storage/local-storage.service';
+import {ApiService} from '../api/services/api.service';
+import {ToastService} from '../plugins/toast/toast.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +14,8 @@ export class ProfileComponent implements OnInit {
   public updateNameForm: FormGroup;
   public load = false;
 
-  constructor(private api: AbstractApiService, private localStorageService: LocalStorageService) { }
+  constructor(private api: ApiService,
+              private localStorageService: LocalStorageService, private toastService: ToastService) { }
 
   ngOnInit(): void {
     const user = this.localStorageService.getItem('user');
@@ -31,10 +33,18 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.initUpdateName();
+    this.initUpdateName(this.updateNameForm.value);
   }
 
-  private initUpdateName(): void {
-
+  private initUpdateName(params): void {
+    this.load = true;
+    this.api.updateUserData(params).subscribe(res => {
+      this.load = false;
+      this.toastService.show({text: 'Данные пользователя обновлены', type: 'success'});
+    }, err => {
+      this.load = false;
+      console.error(err);
+      this.toastService.show({text: err.message, type: 'warning'});
+    });
   }
 }

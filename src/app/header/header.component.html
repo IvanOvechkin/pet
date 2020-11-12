@@ -5,7 +5,7 @@
 
   <div class="date-header">
     <span>
-      {{date | date: 'mediumDate'}}
+      {{(date | async) | date: 'MMM d, y, h:mm:ss'}}
     </span>
   </div>
 
