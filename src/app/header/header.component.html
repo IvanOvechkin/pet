@@ -11,7 +11,7 @@
 
   <div class="block-select">
     <app-custom-select [options]="selectOptions"
-                       [placeholder]="selectorPlaceholder"
+                       [placeholder]="(userInfo$ | async).name"
                        [startValue]="false"
                        [currentSelected]="false"
                        (selectOption)="onChangedSelect($event)">

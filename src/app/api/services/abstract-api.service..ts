@@ -26,4 +26,5 @@ export abstract class AbstractApiService {
   abstract authUser(params: IUserLogPass): Observable<IUserData | Error>;
   abstract createUser(params: IRegistrationUserParams): Observable<IUserData | Error>;
   abstract updateUserData(params: any): Observable<any>;
+  abstract fetchCurrency(): Observable<any>;
 }

@@ -1,28 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import {LocalStorageService} from '../services/local-storage/local-storage.service';
-import {ApiService} from '../api/services/api.service';
 import {ToastService} from '../plugins/toast/toast.service';
+import {StoreService} from "../services/store/store.service";
+import {AngularFireDatabase} from "@angular/fire/database";
+import {AngularFireAuth} from "@angular/fire/auth";
+import {from, Subscription} from "rxjs";
+import {map, switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
   public updateNameForm: FormGroup;
   public load = false;
+  private subscribe: Subscription;
 
-  constructor(private api: ApiService,
-              private localStorageService: LocalStorageService, private toastService: ToastService) { }
+  constructor(private db: AngularFireDatabase,
+              private authFireBase: AngularFireAuth,
+              private toastService: ToastService,
+              private storeService: StoreService) { }
 
   ngOnInit(): void {
-    const user = this.localStorageService.getItem('user');
-    this.updateNameForm = new FormGroup({
-      userName: new FormControl(user.userName, [
-        Validators.required
-      ])
+    this.storeService.getUserInfo().subscribe(user => {
+      this.updateNameForm = new FormGroup({
+        name: new FormControl(user.name, [
+          Validators.required
+        ])
+      });
     });
   }
 
@@ -33,12 +40,22 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.initUpdateName(this.updateNameForm.value);
+    this.initUpdateName();
   }
 
-  private initUpdateName(params): void {
+  private initUpdateName(): void {
     this.load = true;
-    this.api.updateUserData(params).subscribe(res => {
+    const {name} = this.updateNameForm.value;
+    this.subscribe = from(this.authFireBase.currentUser).pipe(
+      map(user => user.uid),
+      switchMap(uid => from(this.db.object(`/users/${uid}/info/name`).set(name)).pipe(
+        switchMap(val => from(this.authFireBase.currentUser).pipe(
+          map(user => user.uid),
+          switchMap(uid => from(this.db.object(`/users/${uid}/info`).valueChanges()))
+        ))
+      )),
+    ).subscribe(userInfo => {
+      this.storeService.setUserInfo(userInfo);
       this.load = false;
       this.toastService.show({text: 'Данные пользователя обновлены', type: 'success'});
     }, err => {
@@ -46,5 +63,9 @@ export class ProfileComponent implements OnInit {
       console.error(err);
       this.toastService.show({text: err.message, type: 'warning'});
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscribe?.unsubscribe();
   }
 }

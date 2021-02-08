@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {HiddenHavService} from '../services/nav/hidden-hav.service';
 import {Router} from '@angular/router';
-import {LocalStorageService} from '../services/local-storage/local-storage.service';
-import {interval} from 'rxjs';
+import {interval, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {StoreService} from '../services/store/store.service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-header',
@@ -14,19 +15,17 @@ export class HeaderComponent implements OnInit {
 
   public selectOptions = [
     {id: 1, value: 'Профиль', icon: 'account_circle', url: 'main/profile'},
-    {id: 2, value: 'Выйти', icon: 'assignment_return', url: 'auth/authentication'}
+    {id: 2, value: 'Выйти', icon: 'assignment_return', url: 'auth/'}
   ];
 
-  public selectorPlaceholder = 'Меню';
-  public date = interval(1000)
-    .pipe(
-      map(() => new Date())
-    );
+  public date = interval(1000).pipe(map(() => new Date()));
+  public userInfo$: Observable<any> = this.storeService.getUserInfo();
 
   constructor(
     private hiddenHavService: HiddenHavService,
     private router: Router,
-    private localStorageService: LocalStorageService
+    private storeService: StoreService,
+    private authFireBase: AngularFireAuth
   ) { }
 
   ngOnInit(): void {
@@ -37,14 +36,11 @@ export class HeaderComponent implements OnInit {
   }
 
   onChangedSelect($event): void {
-    // if ($event.id === 2) this.localStorageService.clear();
-    this.router.navigate([$event.url]).then(
-      (val) => {
-        console.log('redirect', val);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    if ($event.id === 2) {
+      // this.storeService.clearUserInfo();
+      this.authFireBase.signOut()
+        .then(val => console.log('signOut'));
+    }
+    this.router.navigate([$event.url]);
   }
 }

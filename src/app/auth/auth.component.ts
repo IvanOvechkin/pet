@@ -1,22 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {ApiService} from '../api/services/api.service';
-import {switchMap, tap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
-import {LocalStorageService} from '../services/local-storage/local-storage.service';
+import {map, switchMap} from 'rxjs/operators';
+import {from, Subscription} from 'rxjs';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {ToastService} from '../plugins/toast/toast.service';
+import {AngularFireDatabase} from "@angular/fire/database";
+import {StoreService} from "../services/store/store.service";
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
 
   public authForm: FormGroup;
   public load = false;
+  private subscribe: Subscription;
 
-  constructor(private router: Router, private api: ApiService, private localStorage: LocalStorageService) { }
+  constructor(private router: Router,
+              private authFireBase: AngularFireAuth,
+              private db: AngularFireDatabase,
+              private storeService: StoreService,
+              private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.authForm = new FormGroup({
@@ -38,28 +45,27 @@ export class AuthComponent implements OnInit {
       return;
     }
 
-    this.initAuth();
+    this.auth();
   }
 
-  private initAuth(): void {
+  private auth(): void {
     this.load = true;
-    this.api.authUser(this.authForm.value)
+    const {email, password} = this.authForm.value;
+    this.subscribe = from(this.authFireBase.signInWithEmailAndPassword(email, password))
       .pipe(
-        tap((val) => {
-          this.load = false;
-        }),
-        switchMap(response => {
-          return response ? this.redirectToProfile() : new Observable<never>();
-        })
+        map(res => res.user.uid),
+        switchMap(uid => this.db.object(`/users/${uid}/info`).valueChanges())
       )
-      .subscribe(val => {
-        console.log('redirect', val);
-      }, error => {
-        console.log(error);
+      .subscribe(userInfo => {
+        this.storeService.setUserInfo(userInfo);
+        this.load = false;
+        this.router.navigate(['/main/profile']);
+      }, err => {
+        this.toastService.show({type: 'warning', text: err.message});
       });
   }
 
-  private redirectToProfile(): Promise<boolean> {
-    return this.router.navigate(['/main/profile']);
+  ngOnDestroy(): void {
+    this.subscribe?.unsubscribe();
   }
 }

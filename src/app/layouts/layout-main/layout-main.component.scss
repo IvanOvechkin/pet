@@ -18,6 +18,7 @@
   article {
     flex: 2 2 12em;
     background-color: #546e7a;
+    position: relative;
   }
 
   nav {
@@ -25,7 +26,6 @@
   }
 
   @media screen and (min-width: 600px) {
-
     .layout-main {
       min-height: 100vh;
     }

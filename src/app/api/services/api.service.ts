@@ -5,7 +5,7 @@ import {
   IUserData,
   IUserLogPass
 } from './abstract-api.service.';
-import {Observable, throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map, tap} from 'rxjs/operators';
 import {LocalStorageService} from '../../services/local-storage/local-storage.service';
@@ -16,6 +16,20 @@ import {LocalStorageService} from '../../services/local-storage/local-storage.se
 export class ApiService implements AbstractApiService {
 
   private url = 'https://angular-crm-11d38.firebaseio.com';
+
+  private testCurrency = {
+    success: true,
+    timestamp: 1611846127,
+    base: "EUR",
+    date: "2021-01-28",
+    rates: {
+      USD: 1.21304,
+      EUR: 1,
+      RUB: 92.301453,
+    }
+  };
+
+  private fixerEnv = 'f74b6252865dfe6682a25420a3dbb73f';
 
   constructor(private http: HttpClient, private localStorageService: LocalStorageService) { }
 
@@ -60,6 +74,12 @@ export class ApiService implements AbstractApiService {
           return throwError(err);
         })
       );
+  }
+
+  public fetchCurrency(): Observable<any> {
+    // return this.http
+    //   .get(`http://data.fixer.io/api/latest?access_key=${this.fixerEnv}&symbols=USD,EUR,RUB`);
+    return of(this.testCurrency);
   }
 }
 

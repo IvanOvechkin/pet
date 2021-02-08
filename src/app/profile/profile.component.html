@@ -3,8 +3,8 @@
   <section>
     <form [formGroup]="updateNameForm" novalidate (ngSubmit)="submit()">
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="Имя" name="userName" id="userName" formControlName="userName">
-        <label class="form-warning" *ngIf="updateNameForm.controls['userName'].invalid && updateNameForm.controls['userName'].touched" for="userName">
+        <input class="form-control" type="text" placeholder="Имя" name="name" id="name" formControlName="name">
+        <label class="form-warning" *ngIf="updateNameForm.controls['name'].invalid && updateNameForm.controls['name'].touched" for="name">
           name
         </label>
       </div>
