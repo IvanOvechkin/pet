@@ -1,0 +1,23 @@
+.app-navigation {
+  background-color: #455a64;
+  height: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+li:hover, .active {
+  background-color: azure;
+  a {
+    color: black;
+  }
+}
+
+li a {
+  display: block;
+  height: 100%;
+  padding: 20px;
+  color: aliceblue;
+  text-decoration: none;
+}

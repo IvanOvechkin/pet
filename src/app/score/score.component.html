@@ -1,0 +1,41 @@
+<div class="block">
+  <div class="header">
+    <h1>Счёт</h1>
+    <button class="button-submit"><span class="material-icons">autorenew</span></button>
+  </div>
+
+  <hr>
+
+  <div class="content" *ngIf="(currency$ | async) as currency; else loader">
+    <div class="score" *ngIf="(base$ | async) as base">
+      <h2 style="padding-bottom: 30px">Счёт</h2>
+      <p style="padding-bottom: 10px; border-bottom: 2px solid white" *ngFor="let val of base | keyvalue">
+        <span>{{val.value | currency: val.key}}</span>
+      </p>
+    </div>
+    <div class="exchange-rates">
+      <h2 style="padding-bottom: 20px">Курс валют</h2>
+      <table>
+        <thead>
+          <tr>
+            <td>Валюта</td>
+            <td>Курс</td>
+            <td>Дата</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>RUB</td>
+            <td>{{currency.rates.RUB}}</td>
+            <td>{{currency.date}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ng-template #loader>
+    <div class="loading">
+      <div class="spinner loading-spinner"></div>
+    </div>
+  </ng-template>
+</div>

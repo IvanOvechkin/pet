@@ -1,0 +1,68 @@
+.block {
+  padding: 20px;
+  background-color: white;
+  position: absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  overflow: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.content {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 300px;
+}
+
+.score {
+  background-color: dodgerblue;
+  flex: 1 1 auto;
+  margin-right: 20px;
+  border-radius: 5px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 0 3px dodgerblue;
+}
+
+.exchange-rates {
+  background-color: orangered;
+  flex: 2 1 auto;
+  border-radius: 5px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 0 3px orangered;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table td {
+  padding: 12px 16px;
+}
+
+table thead tr {
+  font-weight: bold;
+}
+
+table tr {
+  border-bottom: 1px solid #e8e9eb;
+}

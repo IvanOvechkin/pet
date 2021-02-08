@@ -1,0 +1,37 @@
+.layout-main {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+
+  background-color: aqua;
+  display: flex;
+  flex-direction: column;
+
+  main {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+
+  article {
+    flex: 2 2 12em;
+    background-color: #546e7a;
+    position: relative;
+  }
+
+  nav {
+    flex: 0.5;
+  }
+
+  @media screen and (min-width: 600px) {
+    .layout-main {
+      min-height: 100vh;
+    }
+    main {
+      flex-direction: row;
+      flex: 1 1 auto;
+    }
+  }
+}

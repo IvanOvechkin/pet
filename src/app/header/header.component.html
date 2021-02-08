@@ -1,0 +1,20 @@
+<div class="app-header">
+  <div class="block-nav">
+    <span class="material-icons nav-icon" (click)="toggleHiddenNav()">list</span>
+  </div>
+
+  <div class="date-header">
+    <span>
+      {{(date | async) | date: 'MMM d, y, h:mm:ss'}}
+    </span>
+  </div>
+
+  <div class="block-select">
+    <app-custom-select [options]="selectOptions"
+                       [placeholder]="(userInfo$ | async).name"
+                       [startValue]="false"
+                       [currentSelected]="false"
+                       (selectOption)="onChangedSelect($event)">
+    </app-custom-select>
+  </div>
+</div>

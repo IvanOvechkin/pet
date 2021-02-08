@@ -1,0 +1,52 @@
+<div class="auth-window">
+  <div class="form-group">
+    <span class="auth-title">Домашняя бухгалтерия</span>
+  </div>
+
+  <form [formGroup]="authForm" novalidate (ngSubmit)="submit()">
+    <div class="form-group">
+      <input class="form-control"
+             placeholder="Email"
+             name="email"
+             id="email"
+             formControlName="email"
+             [ngClass]="{
+               'input-warning': authForm.controls['email'].invalid && authForm.controls['email'].touched,
+               'input-success': authForm.controls['email'].valid && authForm.controls['email'].touched
+             }"/>
+      <label class="form-warning" *ngIf="authForm.controls['email'].invalid && authForm.controls['email'].touched" for="email">
+        email
+      </label>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control"
+             placeholder="Пароль"
+             name="password"
+             id="password"
+             formControlName="password"
+             type="password"
+             [ngClass]="{
+               'input-warning': authForm.controls['password'].invalid && authForm.controls['password'].touched,
+               'input-success': authForm.controls['password'].valid && authForm.controls['password'].touched
+             }"/>
+      <label class="form-warning" *ngIf="authForm.controls['password'].invalid && authForm.controls['password'].touched" for="password">
+        password
+      </label>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="button-submit" [disabled]="authForm.invalid">
+        <div *ngIf="load; else buttonContent" class="spinner"></div>
+        <ng-template #buttonContent>
+          <span>Войти</span>
+          <span class="material-icons">login</span>
+        </ng-template>
+      </button>
+    </div>
+  </form>
+
+  <div class="form-group">
+    <span class="registrationLink">Нет аккаунта? <a routerLink="/auth/registration">Зарегистрироваться</a></span>
+  </div>
+</div>
