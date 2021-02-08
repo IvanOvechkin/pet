@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import {ApiModule} from './api/api.module';
 import { AppComponent } from './app.component';
 import {PluginsModule} from './plugins/plugins.module';
+import {AngularFireModule} from '@angular/fire';
+import {AngularFireDatabaseModule} from '@angular/fire/database';
+import {environment} from '../environments/environment.prod';
 
 @NgModule({
   declarations: [
@@ -14,7 +17,9 @@ import {PluginsModule} from './plugins/plugins.module';
     BrowserModule,
     AppRoutingModule,
     ApiModule,
-    PluginsModule
+    PluginsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

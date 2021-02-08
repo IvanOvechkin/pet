@@ -4,8 +4,8 @@ import {LayoutAuthRoutingModule} from './layout-auth-routing.module';
 import {LayoutAuthComponent} from './layout-auth.component';
 import {AuthComponent} from '../../auth/auth.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import {PluginsModule} from "../../plugins/plugins.module";
-import {RegistrationComponent} from "../../registration/registration.component";
+import {PluginsModule} from '../../plugins/plugins.module';
+import {RegistrationComponent} from '../../registration/registration.component';
 
 
 
