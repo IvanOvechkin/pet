@@ -7,7 +7,7 @@ import {
 } from './abstract-api.service.';
 import {Observable, of, throwError} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError, delay, map, tap} from 'rxjs/operators';
 import {LocalStorageService} from '../../services/local-storage/local-storage.service';
 
 @Injectable({
@@ -79,7 +79,10 @@ export class ApiService implements AbstractApiService {
   public fetchCurrency(): Observable<any> {
     // return this.http
     //   .get(`http://data.fixer.io/api/latest?access_key=${this.fixerEnv}&symbols=USD,EUR,RUB`);
-    return of(this.testCurrency);
+    return of(this.testCurrency)
+      .pipe(
+        delay(2000)
+      );
   }
 }
 
