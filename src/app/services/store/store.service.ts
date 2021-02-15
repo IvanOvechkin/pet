@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 
 export interface IUserInfo {
   bill?: number;
@@ -28,10 +28,13 @@ export class StoreService {
 
   currency: ICurrency;
 
+  categories: any;
+
   constructor() { }
 
   userInfo$ = new BehaviorSubject<IUserInfo>(this.userInfo);
   currency$ = new BehaviorSubject<ICurrency>(this.currency);
+  categories$ = new BehaviorSubject<any>(this.categories);
 
   public getUserInfo(): Observable<IUserInfo> {
     return this.userInfo$.asObservable();
@@ -51,5 +54,13 @@ export class StoreService {
 
   public setCurrancy(currency): void {
     this.currency$.next(currency);
+  }
+
+  public getCategories(): Observable<any> {
+    return this.categories$.asObservable();
+  }
+
+  public setCategories(categories): void {
+    this.categories$.next(categories);
   }
 }

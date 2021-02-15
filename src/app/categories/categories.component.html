@@ -1,1 +1,101 @@
-<p>categories works!</p>
+<div class="block">
+  <div class="header">
+    <h1>Категории</h1>
+  </div>
+
+  <section>
+    <div class="create">
+      <h4>Создать</h4>
+      <form [formGroup]="createForm" novalidate (ngSubmit)="submitCreate()">
+        <div class="form-group">
+          <input class="form-control"
+                 placeholder="Название"
+                 id="title"
+                 formControlName="title"
+                 [ngClass]="{'input-warning': createForm.controls['title'].invalid && createForm.controls['title'].touched,
+                            'input-success': createForm.controls['title'].valid && createForm.controls['title'].touched}"/>
+          <label class="form-warning" *ngIf="createForm.controls['title'].invalid && createForm.controls['title'].touched" for="title">
+            Введите название
+          </label>
+        </div>
+
+        <div class="form-group">
+          <input class="form-control"
+                 placeholder="Лимит"
+                 id="createLimit"
+                 formControlName="limit"
+                 type="number"
+                 [ngClass]="{'input-warning': createForm.controls['limit'].invalid && createForm.controls['limit'].touched,
+                            'input-success': createForm.controls['limit'].valid && createForm.controls['limit'].touched}"/>
+          <label class="form-warning" *ngIf="createForm.controls['limit'].invalid && createForm.controls['limit'].touched" for="createLimit">
+            Минимальная величина
+          </label>
+        </div>
+
+        <div class="form-group">
+          <button style="width: 50%;" type="submit" class="button-submit" [disabled]="createForm.invalid">
+            <div *ngIf="loadCreate; else createButtonContent" class="spinner"></div>
+            <ng-template #createButtonContent>
+              <span>Создать</span>
+              <span class="material-icons">add_task</span>
+            </ng-template>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="edit">
+      <div *ngIf="(categories$ | async) as categories; else noCategories">
+        <h4>Редактировать</h4>
+        <div class="form-group" >
+          <app-custom-select [options]="categories"
+                             [startValue]="false"
+                             [currentSelected]="true"
+                             (selectOption)="onChangedSelect($event)">
+          </app-custom-select>
+        </div>
+        <form *ngIf="(editForm$ | async) as editForm" [formGroup]="editForm.form" novalidate (ngSubmit)="submitEdit(editForm.form, editForm.id)">
+          <div class="form-group">
+            <input class="form-control"
+                   placeholder="Выберите категорию"
+                   name="select"
+                   id="select"
+                   formControlName="select"
+                   [ngClass]="{'input-warning': editForm.form.controls['select'].invalid && editForm.form.controls['select'].touched,
+                              'input-success': editForm.form.controls['select'].valid && editForm.form.controls['select'].touched}"/>
+            <label class="form-warning" *ngIf="editForm.form.controls['select'].invalid && editForm.form.controls['select'].touched" for="select">
+              Select
+            </label>
+          </div>
+
+          <div class="form-group">
+            <input class="form-control"
+                   placeholder="Лимит"
+                   name="editLimit"
+                   id="editLimit"
+                   formControlName="editLimit"
+                   type="number"
+                   [ngClass]="{'input-warning': editForm.form.controls['editLimit'].invalid && editForm.form.controls['editLimit'].touched,
+                              'input-success': editForm.form.controls['editLimit'].valid && editForm.form.controls['editLimit'].touched}"/>
+            <label class="form-warning" *ngIf="editForm.form.controls['editLimit'].invalid && editForm.form.controls['editLimit'].touched" for="editLimit">
+              Edit Limit
+            </label>
+          </div>
+
+          <div class="form-group">
+            <button style="width: 50%;" type="submit" class="button-submit" [disabled]="editForm.form.invalid">
+              <div *ngIf="loadEdit; else editButtonContent" class="spinner"></div>
+              <ng-template #editButtonContent>
+                <span>Обновить</span>
+                <span class="material-icons">autorenew</span>
+              </ng-template>
+            </button>
+          </div>
+        </form>
+      </div>
+      <ng-template #noCategories>
+        <p>Категорий пока нет</p>
+      </ng-template>
+    </div>
+  </section>
+</div>

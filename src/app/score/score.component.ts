@@ -34,11 +34,8 @@ export class ScoreComponent implements OnInit {
       map(val => {
         if (val[0] !== null) {
           const base = val[1].bill / (val[0].rates['RUB'] / val[0].rates['EUR']);
-          const kyes = Object.keys(val[0].rates);
           const values = {};
-          kyes.forEach(key => {
-            values[key] = Math.floor(base * val[0].rates[key]);
-          });
+          Object.keys(val[0].rates).forEach(key => values[key] = Math.floor(base * val[0].rates[key]))
           return values;
         }
         return null;

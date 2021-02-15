@@ -2,7 +2,7 @@ import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
 
 interface IOption {
   id: number;
-  value: string;
+  title: string;
   icon?: string;
 }
 
@@ -26,7 +26,7 @@ export class CustomSelectComponent implements OnInit {
 
   change(selectedOption: IOption): void {
     this.currentOption = selectedOption;
-    this.selectOption.emit(selectedOption);
+    this.selectOption.emit(this.currentOption);
   }
 
   constructor() { }
@@ -54,7 +54,10 @@ export class CustomSelectComponent implements OnInit {
   }
 
   private initCurrentOption(): void {
-    this.currentOption = this.options.find(option => option.id === this.startValue);
+    if (this.options && this.options.length) {
+      this.currentOption = this.options.find(option => option.id === this.startValue) || this.options[0];
+      this.selectOption.emit(this.currentOption);
+    }
   }
 
 }

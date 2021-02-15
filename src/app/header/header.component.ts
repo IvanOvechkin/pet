@@ -14,8 +14,8 @@ import {AngularFireAuth} from '@angular/fire/auth';
 export class HeaderComponent implements OnInit {
 
   public selectOptions = [
-    {id: 1, value: 'Профиль', icon: 'account_circle', url: 'main/profile'},
-    {id: 2, value: 'Выйти', icon: 'assignment_return', url: 'auth/'}
+    {id: 1, title: 'Профиль', icon: 'account_circle', url: 'main/profile'},
+    {id: 2, title: 'Выйти', icon: 'assignment_return', url: 'auth/'}
   ];
 
   public date = interval(1000).pipe(map(() => new Date()));

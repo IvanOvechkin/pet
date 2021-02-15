@@ -4,8 +4,6 @@
     <button class="button-submit" (click)="refresh()"><span class="material-icons">autorenew</span></button>
   </div>
 
-  <hr>
-
   <div class="content" *ngIf="(currency$ | async) as currency; else loader">
     <div class="score" *ngIf="(bases$ | async) as bases">
       <h2 style="padding-bottom: 30px">Счёт в валюте</h2>
