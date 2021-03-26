@@ -125,7 +125,7 @@ export class CategoriesComponent implements OnInit {
         switchMap(uid => this.db.list(`/users/${uid}/categories`).update(select.id, {title: select.title, limit: select.limit}))
       )
       .subscribe(cat => {
-        this.toastService.show({type: 'success', text: 'Категория успешно обнавлена'});
+        this.toastService.show({type: 'success', text: 'Категория успешно обновлена'});
       }, err => {
         this.toastService.show({type: 'warning', text: err.message});
       })
