@@ -1,1 +1,80 @@
-<p>record works!</p>
+<div class="block">
+  <div class="header">
+    <h1>Новая запись</h1>
+  </div>
+
+  <div *ngIf="(categories$ | async) as categories else loading">
+    <div class="content">
+      <div *ngIf="categories.length else noCategories" class="form-categories">
+        <div class="form-group">
+          <h4>Редактировать</h4>
+          <app-custom-select [options]="categories"
+                             [startValue]="false"
+                             [currentSelected]="true"
+                             (selectOption)="onChangedSelect($event)">
+          </app-custom-select>
+        </div>
+
+        <form [formGroup]="newRecordForm" novalidate (ngSubmit)="submitNewRecordForm()">
+          <div class="form-group-row form-group-radio">
+            <input id="income" class="form-control" formControlName="type" type="radio" value="income"/>
+            <label for="income">Доход</label>
+          </div>
+          <div class="form-group-row form-group-radio">
+            <input id="uotcome" class="form-control" formControlName="type" type="radio" value="uotcome"/>
+            <label for="uotcome">Расход</label>
+          </div>
+
+          <div class="form-group">
+            <input class="form-control"
+                   placeholder="Введите сумму"
+                   name="amount"
+                   id="amount"
+                   formControlName="amount"
+                   type="number"
+                   [ngClass]="{'input-warning': newRecordForm.controls['amount'].invalid && newRecordForm.controls['amount'].touched,
+                                'input-success': newRecordForm.controls['amount'].valid && newRecordForm.controls['amount'].touched}"/>
+            <label class="form-warning" *ngIf="newRecordForm.controls['amount'].invalid && newRecordForm.controls['amount'].touched" for="amount">
+              Некорректная сумма
+            </label>
+          </div>
+
+          <div class="form-group">
+            <input class="form-control"
+                   placeholder="Введите описание"
+                   name="description"
+                   id="description"
+                   formControlName="description"
+                   type="text"
+                   [ngClass]="{'input-warning': newRecordForm.controls['description'].invalid && newRecordForm.controls['description'].touched,
+                                'input-success': newRecordForm.controls['description'].valid && newRecordForm.controls['description'].touched}"/>
+            <label class="form-warning" *ngIf="newRecordForm.controls['description'].invalid && newRecordForm.controls['description'].touched" for="description">
+              Некорректное описание
+            </label>
+          </div>
+
+          <div class="form-group">
+            <button style="width: 50%;" type="submit" class="button-submit" [disabled]="newRecordForm.invalid">
+              <div *ngIf="loadNewRecord; else ButtonContent" class="spinner"></div>
+              <ng-template #ButtonContent>
+                <span>Создать</span>
+                <span class="material-icons">send</span>
+              </ng-template>
+            </button>
+          </div>
+        </form>
+      </div>
+      <ng-template #noCategories>
+        <p>Категорий пока нет <a routerLink="/main/categories">Добавить новую категорию</a></p>
+      </ng-template>
+    </div>
+  </div>
+  <ng-template #loading>
+    <div class="loading">
+      <div class="spinner loading-spinner"></div>
+    </div>
+  </ng-template>
+</div>
+
+
+

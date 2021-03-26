@@ -16,6 +16,15 @@ export interface ICurrency {
   };
 }
 
+export interface ICategory {
+  limit: number;
+  title: string;
+  id: string;
+}
+
+type TCategory = ICategory[] | null;
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,16 +34,14 @@ export class StoreService {
     name: 'NoName',
     bill: 0
   };
-
   currency: ICurrency;
-
-  categories: any;
+  categories: TCategory = null;
 
   constructor() { }
 
   userInfo$ = new BehaviorSubject<IUserInfo>(this.userInfo);
   currency$ = new BehaviorSubject<ICurrency>(this.currency);
-  categories$ = new BehaviorSubject<any>(this.categories);
+  categories$ = new BehaviorSubject<TCategory>(this.categories);
 
   public getUserInfo(): Observable<IUserInfo> {
     return this.userInfo$.asObservable();
@@ -56,11 +63,11 @@ export class StoreService {
     this.currency$.next(currency);
   }
 
-  public getCategories(): Observable<any> {
+  public getCategories(): Observable<TCategory> {
     return this.categories$.asObservable();
   }
 
-  public setCategories(categories): void {
+  public setCategories(categories: TCategory): void {
     this.categories$.next(categories);
   }
 }

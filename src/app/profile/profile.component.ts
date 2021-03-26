@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public updateNameForm: FormGroup;
   public load = false;
-  private subscribe: Subscription;
+  private subscriptionUserInfo: Subscription;
 
   constructor(private db: AngularFireDatabase,
               private authFireBase: AngularFireAuth,
@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private initUpdateName(): void {
     this.load = true;
     const {name} = this.updateNameForm.value;
-    this.subscribe = from(this.authFireBase.currentUser).pipe(
+    this.subscriptionUserInfo = from(this.authFireBase.currentUser).pipe(
       map(user => user.uid),
       switchMap(uid => from(this.db.object(`/users/${uid}/info/name`).set(name)).pipe(
         switchMap(val => from(this.authFireBase.currentUser).pipe(
@@ -66,6 +66,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscribe?.unsubscribe();
+    this.subscriptionUserInfo?.unsubscribe();
   }
 }
