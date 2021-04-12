@@ -4,7 +4,6 @@ import {HiddenHavService} from '../../services/nav/hidden-hav.service';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {concatMap, first, switchMap} from 'rxjs/operators';
-import {StoreService} from '../../services/store/store.service';
 
 @Component({
   selector: 'app-layout-main',
@@ -18,8 +17,7 @@ export class LayoutMainComponent implements OnInit, OnDestroy {
 
   constructor(private hiddenHavService: HiddenHavService,
               private authFireBase: AngularFireAuth,
-              private db: AngularFireDatabase,
-              private storeService: StoreService) { }
+              private db: AngularFireDatabase) { }
 
   ngOnInit(): void {
     // this.subscribe = from(this.authFireBase.currentUser)

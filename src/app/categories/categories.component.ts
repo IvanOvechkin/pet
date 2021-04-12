@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AngularFireAuth} from "@angular/fire/auth";
-import {from, Observable, of} from "rxjs";
-import {AngularFireDatabase} from "@angular/fire/database";
-import {delay, map, switchMap} from "rxjs/operators";
-import {ToastService} from "../plugins/toast/toast.service";
-import {StoreService} from "../services/store/store.service";
+import {Observable, of} from "rxjs";
+import {delay, map, tap} from "rxjs/operators";
+import {Store} from "@ngrx/store";
+import {AppState} from "../store/state/app.state";
+import {selectCategories} from "../store/selectors/app.selectors";
+import {createCategory, editCategory, getCategories} from "../store/actions/app.actions";
 
 @Component({
   selector: 'app-categories',
@@ -19,32 +19,19 @@ export class CategoriesComponent implements OnInit {
   public loadCreate: boolean = false;
   public loadEdit: boolean = false;
 
-  categories$ = from(this.authFireBase.currentUser)
-  .pipe(
-    map(user => user.uid),
-    switchMap(uid => this.db.object(`/users/${uid}/categories`).snapshotChanges()
-        .pipe(
-          map(changes => {
-            const cat = changes.payload.val();
-            return Object.keys(cat).map(key => ({...cat[key], id: key}))
-          }),
-          switchMap(cat => of(this.store.setCategories(cat))
-            .pipe(
-              switchMap(val => this.store.getCategories())
-            )
-        )
-      )
-    )
+  categories$ = this.store.select(selectCategories).pipe(
+    tap(val => {
+      this.loadCreate = false;
+      this.loadEdit = false;
+    })
   );
 
   editForm$: Observable<any>;
 
-  constructor(private authFireBase: AngularFireAuth,
-              private db: AngularFireDatabase,
-              private store: StoreService,
-              private toastService: ToastService) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    this.store.dispatch(getCategories());
     this.initCreateForm();
   }
 
@@ -89,23 +76,9 @@ export class CategoriesComponent implements OnInit {
       return;
     }
 
-    this.initCreate();
-  }
-
-  private initCreate() {
-    const {title, limit} = this.createForm.value;
-    from(this.authFireBase.currentUser)
-      .pipe(
-        map(user => user.uid),
-        switchMap(uid => this.db.list(`/users/${uid}/categories`).push({title, limit}))
-      )
-      .subscribe(cat => {
-        const category = {title, limit, id: cat.key};
-        this.toastService.show({type: 'success', text: 'Новая категория добавлена'});
-        this.createForm.reset({limit: 100});
-      }, err => {
-        this.toastService.show({type: 'warning', text: err.message});
-      })
+    this.loadCreate = true;
+    this.store.dispatch(createCategory({category: this.createForm.value}));
+    this.createForm.reset({limit: 100});
   }
 
   submitEdit(editForm, id) {
@@ -115,20 +88,8 @@ export class CategoriesComponent implements OnInit {
       return;
     }
 
-    this.initEdit({title: editForm.value.select, limit: editForm.value.editLimit, id});
-  }
-
-  private initEdit(select): void {
-    from(this.authFireBase.currentUser)
-      .pipe(
-        map(user => user.uid),
-        switchMap(uid => this.db.list(`/users/${uid}/categories`).update(select.id, {title: select.title, limit: select.limit}))
-      )
-      .subscribe(cat => {
-        this.toastService.show({type: 'success', text: 'Категория успешно обновлена'});
-      }, err => {
-        this.toastService.show({type: 'warning', text: err.message});
-      })
+    this.loadEdit = true;
+    this.store.dispatch(editCategory({category: {limit: editForm.value.editLimit, title: editForm.value.select, id}}));
   }
 
   onChangedSelect($event: any) {

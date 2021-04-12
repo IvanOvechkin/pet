@@ -4,7 +4,6 @@ import {LayoutMainRoutingModule} from './layout-main-routing.module';
 import {LayoutMainComponent} from './layout-main.component';
 import {NavigationComponent} from '../../navigation/navigation.component';
 import {HeaderComponent} from '../../header/header.component';
-import {FooterComponent} from '../../footer/footer.component';
 import {ScoreComponent} from '../../score/score.component';
 import {HistoryComponent} from '../../history/history.component';
 import {PlanningComponent} from '../../planning/planning.component';
@@ -20,7 +19,6 @@ import {ReactiveFormsModule} from "@angular/forms";
     LayoutMainComponent,
     NavigationComponent,
     HeaderComponent,
-    FooterComponent,
     ScoreComponent,
     HistoryComponent,
     PlanningComponent,

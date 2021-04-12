@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {map, switchMap} from 'rxjs/operators';
-import {from, Subscription} from 'rxjs';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {AngularFireDatabase} from '@angular/fire/database';
-import {ToastService} from '../plugins/toast/toast.service';
+import {Subscription} from 'rxjs';
+import {userCreate} from "../store/actions/app.actions";
+import {Store} from "@ngrx/store";
+import {AppState} from "../store/state/app.state";
+import {selectUserInfo} from "../store/selectors/app.selectors";
 
 @Component({
   selector: 'app-registration',
@@ -16,12 +16,16 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   public registrationForm: FormGroup;
   public load = false;
-  private subscribe: Subscription;
+
+  subscriptionUserInfo$: Subscription = this.store.select(selectUserInfo).subscribe(userInfo => {
+    this.load = false;
+    if (userInfo) {
+      this.router.navigate(['/main/profile']);
+    }
+  });
 
   constructor(private router: Router,
-              private authFireBase: AngularFireAuth,
-              private db: AngularFireDatabase,
-              private toastService: ToastService) { }
+              private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
@@ -33,7 +37,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.minLength(6)
       ]),
-      userName: new FormControl(null, [
+      name: new FormControl(null, [
         Validators.required
       ]),
       agree: new FormControl(false)
@@ -47,26 +51,12 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.registration();
-  }
-
-  private registration(): void {
     this.load = true;
-    const {email, password, userName} = this.registrationForm.value;
-    this.subscribe = from(this.authFireBase.createUserWithEmailAndPassword(email, password))
-      .pipe(
-        map(user => user.user.uid),
-        switchMap(uid => this.db.object(`/users/${uid}/info`).set({bill: 1000, name: userName}))
-      )
-      .subscribe(val => {
-        this.load = false;
-        this.router.navigate(['/main/profile']);
-      }, err => {
-        this.toastService.show({type: 'warning', text: err.message});
-      });
+    const {email, password, name} = this.registrationForm.value;
+    this.store.dispatch(userCreate({email, password, name}));
   }
 
   ngOnDestroy(): void {
-    this.subscribe?.unsubscribe();
+    this.subscriptionUserInfo$.unsubscribe();
   }
 }

@@ -36,14 +36,14 @@
     <div class="form-group">
       <input class="form-control"
              placeholder="Имя"
-             name="userName"
-             id="userName"
-             formControlName="userName"
+             name="name"
+             id="name"
+             formControlName="name"
              [ngClass]="{
-               'input-warning': registrationForm.controls['userName'].invalid && registrationForm.controls['userName'].touched,
-               'input-success': registrationForm.controls['userName'].valid && registrationForm.controls['userName'].touched
+               'input-warning': registrationForm.controls['name'].invalid && registrationForm.controls['name'].touched,
+               'input-success': registrationForm.controls['name'].valid && registrationForm.controls['name'].touched
              }"/>
-      <label class="form-warning" *ngIf="registrationForm.controls['userName'].invalid && registrationForm.controls['userName'].touched" for="userName">
+      <label class="form-warning" *ngIf="registrationForm.controls['name'].invalid && registrationForm.controls['name'].touched" for="name">
         name
       </label>
     </div>

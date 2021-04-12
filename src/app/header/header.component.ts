@@ -3,8 +3,11 @@ import {HiddenHavService} from '../services/nav/hidden-hav.service';
 import {Router} from '@angular/router';
 import {interval, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {StoreService} from '../services/store/store.service';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {Store} from "@ngrx/store";
+import {AppState} from "../store/state/app.state";
+import {IUserInfo} from "../api/services/abstract-api.service.";
+import {selectUserInfo} from "../store/selectors/app.selectors";
 
 @Component({
   selector: 'app-header',
@@ -19,13 +22,13 @@ export class HeaderComponent implements OnInit {
   ];
 
   public date = interval(1000).pipe(map(() => new Date()));
-  public userInfo$: Observable<any> = this.storeService.getUserInfo();
+  userInfo$: Observable<IUserInfo> = this.store.select(selectUserInfo);
 
   constructor(
     private hiddenHavService: HiddenHavService,
     private router: Router,
-    private storeService: StoreService,
-    private authFireBase: AngularFireAuth
+    private authFireBase: AngularFireAuth,
+    private store: Store<AppState>,
   ) { }
 
   ngOnInit(): void {
@@ -37,7 +40,6 @@ export class HeaderComponent implements OnInit {
 
   onChangedSelect($event): void {
     if ($event.id === 2) {
-      // this.storeService.clearUserInfo();
       this.authFireBase.signOut()
         .then(val => console.log('signOut'));
     }
