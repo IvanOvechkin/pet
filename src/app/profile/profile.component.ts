@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import {ToastService} from '../plugins/toast/toast.service';
-import {StoreService} from "../services/store/store.service";
-import {AngularFireDatabase} from "@angular/fire/database";
-import {AngularFireAuth} from "@angular/fire/auth";
-import {from, Subscription} from "rxjs";
-import {map, switchMap} from "rxjs/operators";
+import {Subscription} from "rxjs";
+import {selectUserName} from "../store/selectors/app.selectors";
+import {Store} from "@ngrx/store";
+import {AppState} from "../store/state/app.state";
+import {setUserName} from "../store/actions/app.actions";
 
 @Component({
   selector: 'app-profile',
@@ -16,21 +15,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public updateNameForm: FormGroup;
   public load = false;
-  private subscriptionUserInfo: Subscription;
 
-  constructor(private db: AngularFireDatabase,
-              private authFireBase: AngularFireAuth,
-              private toastService: ToastService,
-              private storeService: StoreService) { }
-
-  ngOnInit(): void {
-    this.storeService.getUserInfo().subscribe(user => {
+  subscriptionUserName$: Subscription = this.store.select(selectUserName).subscribe(userName => {
+    this.load = false;
+    if (userName) {
       this.updateNameForm = new FormGroup({
-        name: new FormControl(user.name, [
+        name: new FormControl(userName, [
           Validators.required
         ])
       });
-    });
+    }
+  });
+
+  constructor(private store: Store<AppState>) { }
+
+  ngOnInit(): void {
   }
 
   public submit(): void {
@@ -40,32 +39,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.initUpdateName();
-  }
-
-  private initUpdateName(): void {
     this.load = true;
-    const {name} = this.updateNameForm.value;
-    this.subscriptionUserInfo = from(this.authFireBase.currentUser).pipe(
-      map(user => user.uid),
-      switchMap(uid => from(this.db.object(`/users/${uid}/info/name`).set(name)).pipe(
-        switchMap(val => from(this.authFireBase.currentUser).pipe(
-          map(user => user.uid),
-          switchMap(uid => from(this.db.object(`/users/${uid}/info`).valueChanges()))
-        ))
-      )),
-    ).subscribe(userInfo => {
-      this.storeService.setUserInfo(userInfo);
-      this.load = false;
-      this.toastService.show({text: 'Данные пользователя обновлены', type: 'success'});
-    }, err => {
-      this.load = false;
-      console.error(err);
-      this.toastService.show({text: err.message, type: 'warning'});
-    });
+    this.store.dispatch(setUserName(this.updateNameForm.value));
   }
 
   ngOnDestroy(): void {
-    this.subscriptionUserInfo?.unsubscribe();
+    this.subscriptionUserName$.unsubscribe();
   }
 }

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import {StoreService, ICurrency} from '../services/store/store.service';
-import {combineLatest, Observable, of} from 'rxjs';
-import {ApiService} from '../api/services/api.service';
-import {map, mergeMap, switchMap} from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {ICurrency} from '../api/services/abstract-api.service.';
+import {combineLatest, Observable} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
+import {Store} from "@ngrx/store";
+import {AppState} from "../store/state/app.state";
+import {selectCurrency, selectUserBill} from "../store/selectors/app.selectors";
+import {fetchCurrency, resetCurrency} from "../store/actions/app.actions";
 
 @Component({
   selector: 'app-score',
@@ -11,44 +14,35 @@ import {map, mergeMap, switchMap} from 'rxjs/operators';
 })
 export class ScoreComponent implements OnInit {
 
-  currency$: Observable<ICurrency> = this.storeService.getCurrancy()
-    .pipe(
-      mergeMap(val => {
-        if (!val) {
-          return this.apiService.fetchCurrency().pipe(
-            switchMap(res => of(this.storeService.setCurrancy(res))
-              .pipe(
-                switchMap(res => this.storeService.getCurrancy())
-              )
-            )
-          );
-        }
-        return of(val);
-      })
-    );
-
-  bases$: Observable<any> = combineLatest(
-    this.storeService.getCurrancy(),
-    this.storeService.getUserInfo()
-  ).pipe(
-      map(val => {
-        if (val[0] !== null) {
-          const base = val[1].bill / (val[0].rates['RUB'] / val[0].rates['EUR']);
-          const values = {};
-          Object.keys(val[0].rates).forEach(key => values[key] = Math.floor(base * val[0].rates[key]))
-          return values;
-        }
-        return null;
-      })
+  currency$: Observable<ICurrency> = this.store.select(selectCurrency).pipe(
+    tap(curency => {
+      if (!curency) {
+        this.store.dispatch(fetchCurrency());
+      }
+    })
   );
 
-  constructor(private storeService: StoreService,
-              private apiService: ApiService) { }
+  bases$: Observable<any> = combineLatest(
+    this.currency$,
+    this.store.select(selectUserBill)
+  ).pipe(
+    map(val => {
+      if (val[0] !== null) {
+        const base = val[1] / (val[0].rates['RUB'] / val[0].rates['EUR']);
+        const values = {};
+        Object.keys(val[0].rates).forEach(key => values[key] = Math.floor(base * val[0].rates[key]));
+        return values;
+      }
+      return null;
+    })
+  );
+
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
   }
 
   refresh() {
-    this.storeService.setCurrancy(null);
+    this.store.dispatch(resetCurrency());
   }
 }
